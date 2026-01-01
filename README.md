@@ -1,3 +1,19 @@
+## API RESTful Laravel 12
+
+Este proyecto es una API RESTful desarrollada con Laravel 12, diseñada como un administrador de tareas (Task Manager) orientado a la práctica y al aprendizaje avanzado del framework. Aunque no busca ser una aplicación completamente funcional a nivel de producción, sí pretende cubrir los aspectos esenciales de una arquitectura moderna de API, incorporando buenas prácticas y las novedades del ecosistema Laravel.
+
+El objetivo principal es dominar el ORM Eloquent y las nuevas características introducidas en Laravel 12, explorando patrones como scopes, global scopes, filtros dinámicos, relaciones avanzadas y un diseño limpio y escalable para consultas complejas.
+
+Además, la API implementará un sistema de autenticación basado en JWT, junto con roles y permisos de usuario, permitiendo gestionar accesos y proteger recursos de forma granular. Esto convierte el proyecto en un entorno ideal para practicar conceptos clave como:
+
+* Autenticación stateless
+* Autorización basada en roles y permisos
+* Middleware personalizados
+* Buenas prácticas en diseño de APIs REST
+* Arquitectura limpia y desacoplada
+
+En conjunto, este proyecto sirve como un laboratorio personal para profundizar en Laravel 12, reforzar conocimientos del ORM y experimentar con patrones modernos de desarrollo backend.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
