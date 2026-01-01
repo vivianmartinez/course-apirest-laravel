@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -20,32 +21,39 @@ class TaskController extends Controller
     /**
      * Store a newly created task in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
-        //
+        $task = Task::create($request->validated());
+        return new TaskResource($task);
     }
 
     /**
      * Display the specified task.
      */
-    public function show(string $id)
+    public function show(Task $task)
     {
-        //
+        $task->load('user');
+        return new TaskResource($task);
     }
 
     /**
      * Update the specified task in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreTaskRequest $request, Task $task)
     {
-        //
+        $task->update($request->validated());
+        return new TaskResource($task);
     }
 
     /**
      * Remove the specified task from storage.
+     * @param  \App\Models\Task  $task  Instancia de la tarea a eliminar.
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(string $id)
+    
+    public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return response()->noContent();
     }
 }
