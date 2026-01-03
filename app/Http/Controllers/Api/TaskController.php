@@ -15,7 +15,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return TaskResource::collection(Task::with('user')->get());
+        $tasks = Task::with('user')->getOrPaginate();
+        return TaskResource::collection($tasks);
     }
 
     /**
@@ -47,7 +48,7 @@ class TaskController extends Controller
 
     /**
      * Remove the specified task from storage.
-     * @param  \App\Models\Task  $task  Instancia de la tarea a eliminar.
+     * @param  \App\Models\Task  $task  Instance of the task to be deleted.
      * @return \Illuminate\Http\Response
      */
     
