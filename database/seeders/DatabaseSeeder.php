@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         // Crear 4 categorías
         Category::factory(4)->create();
         // Crear 20 tareas con un comentario del usuario asignado y otro adicional
-        Task::factory(20)->create()->each(function($task){
+        Task::factory(30)->create()->each(function($task){
             Comment::factory()->create([
                 'task_id' => $task->id,
                 'user_id' => $task->user_id

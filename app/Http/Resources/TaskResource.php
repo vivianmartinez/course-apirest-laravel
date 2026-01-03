@@ -17,7 +17,10 @@ class TaskResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'body' => $this->body,
+            'title' => $this->title,
+            'description' => $this->description,
+            'status' => $this->status,
+            'due_date' => $this->due_date,
             'created_at' => $this->created_at,
             'user'=> new UserResource($this->whenLoaded('user'))
         ];

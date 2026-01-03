@@ -25,7 +25,7 @@ class TaskFactory extends Factory
             'title' => fake()->sentence(4),
             'description' => fake()->optional()->paragraph(),
             'due_date' => $created->copy()->addDays(fake()->numberBetween(0,30)),
-            'status' => fake()->randomElement(['pendiente','en_progreso','completado']),
+            'status' => fake()->randomElement(['pending', 'in_progress', 'completed']),
             'user_id' => User::inRandomOrder()->first()->id,
             'category_id' => Category::inRandomOrder()->first()->id,
             'created_at' => $created,
