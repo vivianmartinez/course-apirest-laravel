@@ -15,12 +15,12 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::with('user')->getOrPaginate();
+        $tasks = Task::with(['user','category','comments.user'])->getOrPaginate();
         return TaskResource::collection($tasks);
     }
 
     /**
-     * Store a newly created task in storage.
+     * Store a newly task in storage.
      */
     public function store(StoreTaskRequest $request)
     {
@@ -33,7 +33,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        $task->load('user');
+        $task->load(['user','category','comments.user']);
         return new TaskResource($task);
     }
 

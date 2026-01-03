@@ -24,18 +24,24 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'body' => $this->isMethod('post') ? ['required', 'string'] : ['sometimes','string'],
-            'user_id' => $this->isMethod('post') ? ['required', 'exists:users,id'] : ['nullable','exists:users,id'],
+            'title' => $this->isMethod('post') ? 'required|string|max:255' : 'nullable|string', 
+            'description' => $this->isMethod('post') ? ['required', 'string'] : ['nullable','string'],
+            'status' => 'required|in:pending,in_progress,completed',
+            'due_date' => 'nullable|date|after_or_equal:today', 
+            'category_id' => 'required|exists:categories,id',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'body.required' => 'La descripción de la tarea es obligatoria.', 
-            'body.string' => 'La descripción debe ser un texto válido.', 
-            'user_id.required' => 'Debes indicar el usuario asignado.', 
-            'user_id.exists' => 'El usuario asignado no existe.',
+            'title.required' => 'The title field is required.',
+            'status.in' => 'The status must be one of: pending, in_progress, or completed.',
+            'category_id.exists' => 'The selected category does not exist.',
+            'description.required' => 'The description field is required', 
+            'description.string' => 'The description field must be a valid string.', 
+            'due_date.date' => 'The due date must be a valid date.',
+            'due_date.after_or_equal' => 'The due date cannot be earlier than today.',
         ];
     }
 

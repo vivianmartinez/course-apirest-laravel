@@ -21,8 +21,11 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'status' => $this->status,
             'due_date' => $this->due_date,
-            'created_at' => $this->created_at,
-            'user'=> new UserResource($this->whenLoaded('user'))
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->created_at->toDateTimeString(),
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'user'=> new UserResource($this->whenLoaded('user')),
+            'comments' => CommentResource::collection($this->whenLoaded('comments'))
         ];
     }
 }

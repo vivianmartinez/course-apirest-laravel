@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -11,5 +13,9 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResources([
     'users' => UserController::class,
-    'tasks' => TaskController::class
+    'tasks' => TaskController::class,
+    'categories' => CategoryController::class,
 ]);
+// comments
+Route::apiResource('comments',CommentController::class)->except(['store','index']);
+Route::get('tasks/{task}/comments', [CommentController::class, 'byTask']);

@@ -3,24 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CommentResource;
 use App\Models\Comment;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Store newly comments for the task.
      */
-    public function index()
-    {
-        //
-    }
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function storeByTask(Request $request)
     {
         //
     }
@@ -30,7 +23,8 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+        $comment->load(['user','task']); 
+        return new CommentResource($comment);
     }
 
     /**
@@ -47,5 +41,11 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         //
+    }
+
+    public function byTask(Task $task){
+        $comments = $task->comments()->with('user')->get();
+
+        return CommentResource::collection($comments);
     }
 }
