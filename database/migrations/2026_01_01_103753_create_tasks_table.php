@@ -15,12 +15,20 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->enum('status',['pending', 'in_progress', 'completed'])->default('pending');
+            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
             $table->date('due_date')->nullable(); // fecha de vencimiento de la tarea
-            // Foreign 'users'
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            
+
+            // Nuevo: autor de la tarea (JWT)
+            $table->unsignedBigInteger('created_by');
+
+            // Nuevo: usuario asignado
+            $table->unsignedBigInteger('assigned_to')->nullable();
+
             $table->timestamps();
+
+            // Relaciones
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('assigned_to')->references('id')->on('users')->nullOnDelete();
         });
     }
 

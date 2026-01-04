@@ -21,12 +21,12 @@ class TaskFactory extends Factory
     {
         $created = Carbon::now()->subMonth()->addDays(fake()->numberBetween(0,30));
         return [
-            //
             'title' => fake()->sentence(4),
             'description' => fake()->optional()->paragraph(),
             'due_date' => $created->copy()->addDays(fake()->numberBetween(0,30)),
             'status' => fake()->randomElement(['pending', 'in_progress', 'completed']),
-            'user_id' => User::inRandomOrder()->first()->id,
+            'created_by' => User::inRandomOrder()->first()->id,
+            'assigned_to' => User::inRandomOrder()->first()->id,
             'category_id' => Category::inRandomOrder()->first()->id,
             'created_at' => $created,
             'updated_at' => $created

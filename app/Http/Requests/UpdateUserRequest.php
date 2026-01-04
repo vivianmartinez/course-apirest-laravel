@@ -30,12 +30,12 @@ class UpdateUserRequest extends FormRequest
 
     public function messages(): array { 
         return [
-            'name.string' => 'The name field must be a valid string.', 
-            'name.max' => 'The name may not be greater than 255 characters.',
-            'email.email' => 'Thie email field must be a valid email address.',
-            'email.unique' => 'This email is already registered.',
-            'password.string' => 'The password must be a valid string.', 
-            'password.min' => 'The password must be at least 8 characters long.'
-        ]; 
+            'name.string' => 'El campo name debe ser un string válido.', 
+            'name.max' => 'La longitud máxima del campo name es de 255 carácteres.',
+            'email.email' => 'El campo email debe ser una dirección de correo válida.',
+            'email.unique' => 'El email ya se encuentra registrado.',
+            'password.string' => 'El campo password debe ser un string válido.', 
+            'password.min' => 'El campo password debe contener un mínimo de 8 carácteres.' 
+        ];
     }
 }

@@ -28,8 +28,8 @@ class StoreCommentRequest extends FormRequest
 
     public function messages(): array { 
         return [
-            'content.required' => 'The comment content is required.',
-            'content.string' => 'The content field must be a valid string.',
+            'content.required' => 'El campo content es requerido.',
+            'content.string' => 'El campo content debe contener un string válido.',
         ]; 
     }
 }

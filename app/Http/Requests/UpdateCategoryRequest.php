@@ -29,9 +29,9 @@ class UpdateCategoryRequest extends FormRequest
 
     public function messages(): array { 
         return [
-            'name.string' => 'The category name must be a valid string.',
-            'name.max' => 'The name may not be greater than 255 characters.',
-            'name.unique' => 'This category already exists.',
+            'name.string' => 'El nombre de la categoría debe ser un string válido.',
+            'name.max' => 'La longitud máxima del campo name es de 255 carácteres.',
+            'name.unique' => 'El nombre de esta categoría ya existe.',
         ]; 
     }
 }

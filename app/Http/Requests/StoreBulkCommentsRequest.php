@@ -29,11 +29,11 @@ class StoreBulkCommentsRequest extends FormRequest
 
     public function messages(): array { 
         return [
-            'comments.required' => 'The comment content is required.',
-            'comments.array' => 'Comments must be sent as an array.', 
-            'comments.min' => 'At least one comment is required.', 
-            'comments.*.content.required' => 'Each comment must include content.', 
-            'comments.*.content.string' => 'Each comment must be a valid string.'
+            'comments.required' => 'El campo content es requerido.',
+            'comments.array' => 'El campo comments debe ser de tipo array.', 
+            'comments.min' => 'Al menos un comentario es requerido.', 
+            'comments.*.content.required' => 'Cada comentario debe incluir un content.', 
+            'comments.*.content.string' => 'Cada comentario debe ser un string válido.'
         ]; 
     }
 

@@ -25,6 +25,7 @@ class UpdateTaskRequest extends FormRequest
             'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|nullable|string',
             'status' => 'sometimes|in:pending,in_progress,completed',
+            'assigned_to' => 'sometimes|exists:users,id',
             'due_date' => 'sometimes|nullable|date|after_or_equal:today',
             'category_id' => 'sometimes|exists:categories,id',
         ];
@@ -33,14 +34,14 @@ class UpdateTaskRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.string' => 'The title must be a valid string.',
-            'title.max' => 'The title may not be greater than 255 characters.',
-            'description.string' => 'The title must be a valid string.',
-            'status.in' => 'The status must be one of: pending, in_progress, or completed.',
-            'due_date.date' => 'The due date must be a valid date.',
-            'due_date.after_or_equal' => 'The due date cannot be earlier than today.',
-            'category_id.exists' => 'The selected category does not exist.',
+            'title.string' => 'El campo title debe ser un string válido.', 
+            'title.max' => 'La longitud máxima del campo title es de 255 carácteres.',
+            'description.string' => 'El campo description debe ser un string válido.', 
+            'status.in' => 'El campo status sólo puede contener los valorees: pending, in_progress y completed.',
+            'assigned_to.exists' => 'El usuario asignado no existe',
+            'due_date.date' => 'El due date debe ser una fecha válida (aaaa-mm-dd).',
+            'due_date.after_or_equal' => 'El campo due date no puede ser una fecha inferior a la de hoy.',
+            'category_id.exists' => 'La categoría seleccionada no existe.',
         ];
     }
-
 }

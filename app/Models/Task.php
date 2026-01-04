@@ -22,23 +22,37 @@ class Task extends Model
         'description',
         'status',
         'due_date',
-        'user_id',
+        'created_by',
+        'assigned_to',
         'category_id'
     ];
 
-    public function user(){
-        return $this->belongsTo(User::class,'user_id','id');
+    // public function user(){
+    //     return $this->belongsTo(User::class,'user_id','id');
+    // }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
-    
-    public function category(){
+
+    public function assigned()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
-    public function scopeGetOrPaginate($query){
+    public function scopeGetOrPaginate($query)
+    {
         return request('per_page') ? $query->paginate(request('per_page')) : $query->get();
     }
 }

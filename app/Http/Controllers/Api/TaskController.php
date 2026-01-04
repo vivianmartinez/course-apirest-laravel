@@ -8,54 +8,88 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class TaskController extends Controller
+class TaskController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return [new Middleware('auth:api')];
+    }
+
     /**
-     * Display a listing of the tasks with their users.
+     * Lista todas las tareas disponibles.
+     *
+     * Este método obtiene todas las tareas y las transforma mediante TaskFullResource para devolver una colección.
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        $tasks = Task::with(['user','category','comments.user'])->getOrPaginate();
+        $tasks = Task::with(['author', 'assigned', 'category', 'comments.user'])->getOrPaginate();
         return TaskResource::collection($tasks);
     }
 
     /**
-     * Store a newly task in storage.
+     * Crea una nueva tarea y devuelve su recurso.
+     * Payload esperado (JSON):
+     * - title: string
+     * - description: string
+     * - status: string
+     * - due_date: string (YYYY-MM-DD)
+     * - category_id: integer
+     * @param  \App\Http\Requests\StoreTaskRequest  $request
+     * @return \App\Http\Resources\TaskResource
      */
     public function store(StoreTaskRequest $request)
     {
-        $validated = $request->validated(); 
-        // Temporal hasta que implementemos autenticación 
-        $validated['user_id'] = 1;
+        $validated = $request->validated();
+        // Usuario autenticado JWT 
+        $validated['created_by'] = auth('api')->id();
         $task = Task::create($validated);
-        return new TaskResource($task->load(['user','category']));
+        return new TaskResource($task->load(['author', 'assigned', 'category']));
     }
 
     /**
-     * Display the specified task.
+     * Muestra una tarea específica.
+     *
+     * @param  \App\Models\Task  $task
+     * @return \App\Http\Resources\TaskResource
      */
     public function show(Task $task)
     {
-        $task->load(['user','category','comments.user']);
+        $task->load(['author', 'assigned', 'category', 'comments.user']);
         return new TaskResource($task);
     }
 
     /**
-     * Update the specified task in storage.
+     * Actualiza una tarea y devuelve su recurso actualizado.
+     *
+     * Payload esperado (JSON):
+     * - title: string
+     * - description: string
+     * - status: string
+     * - due_date: string (YYYY-MM-DD)
+     * - category_id: integer
+     * 
+     * @param  \App\Http\Requests\UpdateTaskRequest  $request
+     * @param  \App\Models\Task  $task  Instancia de Task.
+     * @return \App\Http\Resources\TaskResource
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
         $task->update($request->validated());
-        return new TaskResource($task->load(['user','category','comments']));
+        return new TaskResource($task->load(['author', 'assigned', 'category', 'comments']));
     }
 
     /**
-     * Remove the specified task from storage.
-     * @param  \App\Models\Task  $task  Instance of the task to be deleted.
+     * Elimina una tarea específica.
+     * 
+     * @param  \App\Models\Task  $task  Instancia de Task.
      * @return \Illuminate\Http\Response
      */
-    
     public function destroy(Task $task)
     {
         $task->delete();

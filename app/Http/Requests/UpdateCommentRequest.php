@@ -28,7 +28,7 @@ class UpdateCommentRequest extends FormRequest
 
     public function messages(): array { 
         return [
-            'content.string' => 'The content field must be a valid string.',
+            'content.string' => 'El campo content debe contener un string válido.',
         ]; 
     }
 }

@@ -18,15 +18,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear 5 usuarios
-        User::factory(5)->create();
+        // Crear 10 usuarios
+        User::factory(10)->create();
         // Crear 4 categorías
         Category::factory(4)->create();
-        // Crear 20 tareas con un comentario del usuario asignado y otro adicional
+        // Crear 30 tareas con un comentario del usuario asignado y otro adicional
         Task::factory(30)->create()->each(function($task){
             Comment::factory()->create([
                 'task_id' => $task->id,
-                'user_id' => $task->user_id
+                'user_id' => $task->assigned_to
             ]);
             // comentario de otro usuario
             Comment::factory()->create(['task_id' => $task->id]);

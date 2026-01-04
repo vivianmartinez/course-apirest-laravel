@@ -27,6 +27,7 @@ class StoreTaskRequest extends FormRequest
             'title' => 'required|string|max:255', 
             'description' => ['required', 'string'],
             'status' => 'required|in:pending,in_progress,completed',
+            'assigned_to' => 'nullable|exists:users,id',
             'due_date' => 'nullable|date|after_or_equal:today', 
             'category_id' => 'required|exists:categories,id',
         ];
@@ -35,15 +36,16 @@ class StoreTaskRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'The title field is required.',
-            'title.string' => 'The title field must be a valid string.', 
-            'title.max' => 'The title may not be greater than 255 characters.',
-            'status.in' => 'The status must be one of: pending, in_progress, or completed.',
-            'description.required' => 'The description field is required', 
-            'description.string' => 'The description field must be a valid string.', 
-            'due_date.date' => 'The due date must be a valid date.',
-            'due_date.after_or_equal' => 'The due date cannot be earlier than today.',
-            'category_id.exists' => 'The selected category does not exist.',
+            'title.required' => 'El campo title es requerido.',
+            'title.string' => 'El campo title debe ser un string válido.', 
+            'title.max' => 'La longitud máxima del campo title es de 255 carácteres.',
+            'assigned_to.exists' => 'El usuario asignado no existe',
+            'status.in' => 'El campo status sólo puede contener los valorees: pending, in_progress y completed.',
+            'description.required' => 'El campo description es requerido.', 
+            'description.string' => 'El campo description debe ser un string válido.', 
+            'due_date.date' => 'El due date debe ser una fecha válida (aaaa-mm-dd).',
+            'due_date.after_or_equal' => 'El campo due date no puede ser una fecha inferior a la de hoy.',
+            'category_id.exists' => 'La categoría seleccionada no existe.',
         ];
     }
 
