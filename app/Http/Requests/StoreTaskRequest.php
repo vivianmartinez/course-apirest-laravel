@@ -24,8 +24,8 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => $this->isMethod('post') ? 'required|string|max:255' : 'nullable|string', 
-            'description' => $this->isMethod('post') ? ['required', 'string'] : ['nullable','string'],
+            'title' => 'required|string|max:255', 
+            'description' => ['required', 'string'],
             'status' => 'required|in:pending,in_progress,completed',
             'due_date' => 'nullable|date|after_or_equal:today', 
             'category_id' => 'required|exists:categories,id',
@@ -36,12 +36,14 @@ class StoreTaskRequest extends FormRequest
     {
         return [
             'title.required' => 'The title field is required.',
+            'title.string' => 'The title field must be a valid string.', 
+            'title.max' => 'The title may not be greater than 255 characters.',
             'status.in' => 'The status must be one of: pending, in_progress, or completed.',
-            'category_id.exists' => 'The selected category does not exist.',
             'description.required' => 'The description field is required', 
             'description.string' => 'The description field must be a valid string.', 
             'due_date.date' => 'The due date must be a valid date.',
             'due_date.after_or_equal' => 'The due date cannot be earlier than today.',
+            'category_id.exists' => 'The selected category does not exist.',
         ];
     }
 
@@ -57,6 +59,6 @@ class StoreTaskRequest extends FormRequest
         $allowedFields = array_keys($this->rules()); 
         $sentFields = array_keys($this->all()); 
         $notAllowed = array_diff($sentFields, $allowedFields);
-        if(!empty($notAllowed)) throw ValidationException::withMessages(['campos_no_validos'=> 'Campos inválidos: '.implode(',',$notAllowed)]);
+        if(!empty($notAllowed)) throw ValidationException::withMessages(['invalid_fields'=> 'fields: '.implode(',',$notAllowed)]);
     }
 }

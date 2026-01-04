@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryFullResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -19,11 +21,12 @@ class CategoryController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly category in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        //
+        $category = Category::create($request->validated());
+        return new CategoryFullResource($category);
     }
 
     /**
@@ -39,9 +42,10 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $category->update($request->validated());
+        return new CategoryFullResource($category->load('tasks'));
     }
 
     /**
@@ -49,6 +53,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return response()->noContent();
     }
 }

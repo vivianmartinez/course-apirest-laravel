@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -24,8 +25,11 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        $task = Task::create($request->validated());
-        return new TaskResource($task);
+        $validated = $request->validated(); 
+        // Temporal hasta que implementemos autenticación 
+        $validated['user_id'] = 1;
+        $task = Task::create($validated);
+        return new TaskResource($task->load(['user','category']));
     }
 
     /**
@@ -40,10 +44,10 @@ class TaskController extends Controller
     /**
      * Update the specified task in storage.
      */
-    public function update(StoreTaskRequest $request, Task $task)
+    public function update(UpdateTaskRequest $request, Task $task)
     {
         $task->update($request->validated());
-        return new TaskResource($task);
+        return new TaskResource($task->load(['user','category','comments']));
     }
 
     /**

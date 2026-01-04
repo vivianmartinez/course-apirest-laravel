@@ -19,3 +19,5 @@ Route::apiResources([
 // comments
 Route::apiResource('comments',CommentController::class)->except(['store','index']);
 Route::get('tasks/{task}/comments', [CommentController::class, 'byTask']);
+Route::post('tasks/{task}/comments/bulk', [CommentController::class, 'storeBulkByTask']);
+

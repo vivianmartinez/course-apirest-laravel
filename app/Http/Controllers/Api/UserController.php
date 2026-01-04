@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserFullResource;
 use App\Http\Resources\UserResource;
@@ -20,15 +22,18 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly user in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $validated = $request->validated(); 
+        $validated['password'] = bcrypt($validated['password']); 
+        $user = User::create($validated); 
+        return new UserResource($user);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified user.
      */
     public function show(User $user)
     {
@@ -36,27 +41,24 @@ class UserController extends Controller
         return new UserFullResource($user);
     }
 
+
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified user in storage.
      */
-    public function edit(string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $validated = $request->validated();
+        if(isset($validated['password'])) $validated['password'] = bcrypt($validated['password']);
+        $user->update($validated);
+        return new UserFullResource($user->load(['tasks.category','tasks.comments']));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified user from storage.
      */
-    public function update(Request $request, string $id)
+    public function destroy(User $user)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $user->delete();
+        return response()->noContent();
     }
 }
