@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserFullResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -11,7 +12,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
-class AuthController extends Controller implements HasMiddleware
+class AuthController extends Controller
 {
 
     /**
@@ -23,11 +24,16 @@ class AuthController extends Controller implements HasMiddleware
      * exigiendo un token JWT válido para acceder a cualquiera de sus acciones.
      * En este controlador todos sus métodos se encuentran protegidos excepto login y register.
      */
-    public static function middleware(): array
+    // public static function middleware(): array
+    // {
+    //     return [
+    //         new Middleware('auth:api', except: ['login', 'register']),
+    //     ];
+    // }
+
+    public function __construct()
     {
-        return [
-            new Middleware('auth:api', except: ['login', 'register']),
-        ];
+        $this->middleware(['auth:api'])->except(['login','register']);
     }
 
     /**
@@ -45,13 +51,16 @@ class AuthController extends Controller implements HasMiddleware
         $validated = $request->validated();
         $validated['email_verified_at'] = now();
         $validated['password'] = Hash::make($validated['password']);
-
+        //Crear usuario
         $user = User::create($validated);
-
+        // Generar token
         $token = JWTAuth::fromUser($user);
+        // Rol por defecto 
+        $user->assignRole('user');
 
         return response()->json([
             'user'  => $user,
+            'roles' => $user->getRoleNames(),
             'token' => $token,
             'token_type'   => 'bearer',
             'expires_in'   => JWTAuth::factory()->getTTL() * 60,
@@ -101,7 +110,14 @@ class AuthController extends Controller implements HasMiddleware
      */
     public function me()
     {
-        return response()->json(auth('api')->user());
+        $user = auth('api')->user();
+        return response()->json(
+            [
+              'user' => $user, 
+              'roles' => $user->getRoleNames(), 
+              'permissions' => $user->getAllPermissions()->pluck('name'),  
+            ]
+        );
     }
 
     /**

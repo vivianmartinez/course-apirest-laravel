@@ -9,15 +9,14 @@ use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Task;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 
-class CommentController extends Controller implements HasMiddleware
+
+class CommentController extends Controller
 {
 
-    public static function middleware(): array
+    public function __construct()
     {
-        return [new Middleware('auth:api')];
+        $this->middleware(['auth:api']);
     }
 
     /**

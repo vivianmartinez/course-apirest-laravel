@@ -7,11 +7,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Spatie\Permission\Traits\HasRoles;
+
+/**
+ * @method \Illuminate\Support\Collection getRoleNames()
+ * @method bool hasRole(string $role)
+ * @method \Spatie\Permission\Models\Role[] roles()
+ * @method void assignRole(...$roles)
+ * @method void removeRole(...$roles)
+ * @method \Illuminate\Support\Collection getAllPermissions()
+ */
 
 class User extends Authenticatable implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -48,7 +58,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function tasks() { 
-        return $this->hasMany(Task::class); 
+        return $this->hasMany(Task::class,'created_by'); 
     } 
     
     public function comments() { 

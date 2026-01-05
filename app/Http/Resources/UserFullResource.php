@@ -17,10 +17,12 @@ class UserFullResource extends JsonResource
         // return parent::toArray($request);
         $user = (new UserResource($this))->toArray($request);
         // Añadimos campos extra 
-        return array_merge($user, [ 'email' => $this->email, 
-                                    'created_at' => $this->created_at->toDateTimeString(), 
-                                    'updated_at' => $this->updated_at->toDateTimeString(),
-                                    'tasks' => TaskResource::collection($this->whenLoaded('tasks'))
-                                ]);
+        return array_merge($user, [ 
+            'email' => $this->email, 
+            'roles' => RoleResource::collection($this->whenLoaded('roles')),
+            'created_at' => $this->created_at->toDateTimeString(), 
+            'updated_at' => $this->updated_at->toDateTimeString(),
+            'tasks' => TaskResource::collection($this->whenLoaded('tasks'))
+        ]);
     }
 }

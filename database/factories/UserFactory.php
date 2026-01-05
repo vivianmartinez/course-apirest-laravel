@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -37,8 +38,19 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function configure()
+    {
+        // Asignar un rol a los usuarios
+        return $this->afterCreating(function ($user) {
+            // Obtener un rol aleatorio de la tabla roles
+            $role = Role::inRandomOrder()->first();
+            // Asignarlo al usuario
+            $user->assignRole($role);
+        });
     }
 }

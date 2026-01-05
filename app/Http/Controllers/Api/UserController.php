@@ -9,16 +9,14 @@ use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserFullResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller implements HasMiddleware
+class UserController extends Controller
 {
 
-    public static function middleware(): array
+    public function __construct()
     {
-        return [new Middleware('auth:api')];
+        $this->middleware(['auth:api']);
     }
 
     /**
@@ -61,7 +59,7 @@ class UserController extends Controller implements HasMiddleware
      */
     public function show(User $user)
     {
-        $user->load(['tasks.category', 'tasks.comments']);
+        $user->load(['tasks.category', 'tasks.comments','roles']);
         return new UserFullResource($user);
     }
 

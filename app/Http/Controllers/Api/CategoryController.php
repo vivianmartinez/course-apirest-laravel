@@ -7,23 +7,13 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryFullResource;
 use App\Models\Category;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 
-class CategoryController extends Controller implements HasMiddleware
+class CategoryController extends Controller
 {
 
-    /**
-     * Declara los middlewares asociados a este controlador.
-     *
-     * Laravel ejecuta este método estático al registrar las rutas del controlador.
-     * Permite aplicar middlewares de forma centralizada, sin configurarlos en el archivo de rutas.
-     * En este caso, se protege todo el controlador con el middleware 'auth:api',
-     * exigiendo un token JWT válido para acceder a cualquiera de sus acciones.
-     */
-    public static function middleware(): array
+    public function __construct()
     {
-        return [new Middleware('auth:api')];
+        $this->middleware(['auth:api']);
     }
 
     /**

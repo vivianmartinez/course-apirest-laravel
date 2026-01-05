@@ -7,16 +7,14 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
-class TaskController extends Controller implements HasMiddleware
+class TaskController extends Controller
 {
 
-    public static function middleware(): array
+    public function __construct()
     {
-        return [new Middleware('auth:api')];
+        $this->middleware(['auth:api']);
     }
 
     /**
