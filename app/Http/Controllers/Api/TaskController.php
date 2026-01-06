@@ -26,6 +26,7 @@ class TaskController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny',Task::class);
         $tasks = Task::with(['author', 'assigned', 'category', 'comments.user'])->getOrPaginate();
         return TaskResource::collection($tasks);
     }
@@ -43,6 +44,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
+        $this->authorize('create',Task::class);
         $validated = $request->validated();
         // Usuario autenticado JWT 
         $validated['created_by'] = auth('api')->id();
@@ -58,6 +60,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        $this->authorize('view',$task);
         $task->load(['author', 'assigned', 'category', 'comments.user']);
         return new TaskResource($task);
     }
@@ -78,6 +81,7 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
+        $this->authorize('update',$task);
         $task->update($request->validated());
         return new TaskResource($task->load(['author', 'assigned', 'category', 'comments']));
     }
@@ -90,6 +94,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $this->authorize('delete',$task);
         $task->delete();
         return response()->noContent();
     }
