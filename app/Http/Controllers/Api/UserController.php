@@ -28,6 +28,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        // Sólo pueden listar los usuarios aquellos que tengan el rol de admin y manager
+        $this->authorize('viewAny',User::class);
         return new UserCollection(User::all());
     }
 
@@ -45,6 +47,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        $this->authorize('create',User::class); // sólo usuarios autorizados pueden crear usuarios
         $validated = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
@@ -59,6 +62,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view',$user);
         $user->load(['tasks.category', 'tasks.comments','roles']);
         return new UserFullResource($user);
     }
@@ -78,6 +82,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
+        $this->authorize('update',$user);
         $validated = $request->validated();
         if (isset($validated['password'])) $validated['password'] = Hash::make($validated['password']);
         $user->update($validated);
@@ -92,6 +97,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete',$user);
         $user->delete();
         return response()->noContent();
     }

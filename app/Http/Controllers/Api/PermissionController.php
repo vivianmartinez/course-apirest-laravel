@@ -50,7 +50,15 @@ class PermissionController extends Controller
      */
     public function update(Request $request, Permission $permission)
     {
-        $request->validate(['name' => 'required|string|unique:permissions,name' . $permission->id]);
+        $request->validate(
+            [
+                'name' => 'required|string|unique:permissions,name,' . $permission->id
+            ],
+            [
+                'name.required' => 'El campo name es requerido.',
+                'name.unique' => 'El nombre del permiso ya existe.',
+            ]
+        );
         $permission->update(['name' => $request->name]);
         return response()->json(['data' => $permission], 201);
     }
