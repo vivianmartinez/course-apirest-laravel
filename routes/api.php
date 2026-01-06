@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\RolePermissionController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserRoleController;
@@ -35,8 +36,16 @@ Route::apiResources([
 ]);
 
 // Acciones para administrar roles de usuarios
-Route::get('users/{user}/roles', [UserRoleController::class, 'listRoles']);
-Route::post('users/{user}/roles', [UserRoleController::class, 'assignRole']);
-Route::delete('users/{user}/roles', [UserRoleController::class, 'removeRole']);
+Route::prefix('users/{user}')->group(function () {
+    Route::get('roles', [UserRoleController::class, 'index']);
+    Route::post('roles/bulk', [UserRoleController::class, 'assignBulk']);
+    Route::post('roles/{role}', [UserRoleController::class, 'assign']);
+    Route::delete('roles/{role}', [UserRoleController::class, 'remove']);
+});
 
 // Acciones para administrar permisos de usuarios
+Route::prefix('roles/{role}')->group(function () {
+    Route::get('permissions', [RolePermissionController::class, 'index']);
+    Route::post('permissions/{permission}', [RolePermissionController::class, 'attach']);
+    Route::delete('permissions/{permission}', [RolePermissionController::class, 'detach']);
+});
